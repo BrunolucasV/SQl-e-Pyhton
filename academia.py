@@ -2,13 +2,35 @@ import mysql.connector
 
 conexao = mysql.connector.connect(
     host='localhost',
-    user= '???????',
-    password= '???????',
+    user='adm',
+    password='Bruno#040298',
     database='academia',
 )
 
+
 cursor = conexao.cursor()
-resposta = int(input ("digite 1: "))
+
+def ler(tabela):
+    comando = f'SELECT * FROM {tabela};'
+    cursor.execute(comando)
+    resultado = cursor.fetchall()
+    print(resultado)
+
+# Função para atualizar registros
+def atualizar(tabela, coluna, novo_valor, condicao_coluna, condicao_valor):
+    comando = f'UPDATE {tabela} SET {coluna} = "{novo_valor}" WHERE {condicao_coluna} = "{condicao_valor}";'
+    cursor.execute(comando)
+    conexao.commit()
+    print(f"Registro atualizado com sucesso na tabela {tabela}.")
+
+# Função para deletar registros
+def deletar(tabela, condicao_coluna, condicao_valor):
+    comando = f'DELETE FROM {tabela} WHERE {condicao_coluna} = "{condicao_valor}";'
+    cursor.execute(comando)
+    conexao.commit()
+    print(f"Registro deletado com sucesso da tabela {tabela}.")
+
+resposta = int(input ("digite 1: ver uma tabela, digite 2: criar em alguma tabela, digite 3: editar em uma tabela, digite 4: para excluir uma tabela "))
 
 if resposta == 1:
     print (f"digite o que voce gostaria de ver: ")
@@ -19,7 +41,7 @@ if resposta == 1:
     print (resultado)
 
 elif resposta == 2:
-   teste = int(input("ditite"))
+   teste = int(input("ditite as informacoes para serem colocadas na tabela "))
    nome = input("digite o nome do funcionario: ")
    telf =input ("digite o telefone da funcionario: ")
    email= input("digite o email da funcionario: ")
@@ -35,37 +57,18 @@ elif resposta == 2:
    print (resultado)
 
 elif resposta == 3:
-    ler = f'select * from cadastro;'
-    cursor.execute(ler)
-    resultado = cursor.fetchall()
-    print (resultado)
+    tabela = input("Digite a tabela que deseja atualizar (bonus, cadastro, cadastro_info, funcionario, orcamento): ")
+    coluna = input("Digite a coluna que deseja atualizar: ")
+    novo_valor = input("Digite o novo valor: ")
+    condicao_coluna = input("Digite a coluna da condição: ")
+    condicao_valor = input("Digite o valor da condição: ")
+    atualizar(tabela, coluna, novo_valor, condicao_coluna, condicao_valor)
 
-    telf= int(input("digite o telf da pessoa: "))
-    id = int(input("digite o id da pessoa: "))
-    atualizar = f'UPDATE cadastro SET telf= "{telf}"   WHERE ID = {id}'
-    cursor.execute(atualizar)
-    conexao.commit()
-    
-    print ("alteração feita com sucesso")
-    cursor.execute(ler)
-    resultado = cursor.fetchall()
-    print (resultado)
-
-else:
-    ler = f'select * from cadastro;'
-    cursor.execute(ler)
-    resultado = cursor.fetchall()
-    print (resultado)
-
-    id = int(input("digite o id da pessoa que sera deletado: "))
-    deletar= f'DELETE FROM cadastro WHERE ID = {id}'
-    cursor.execute(deletar)
-    conexao.commit()
-    print ("o aqruivo foi excluido  com sucesso")
-    ler = f'select * from cadastro;'
-    cursor.execute(ler)
-    resultado = cursor.fetchall()
-    print (resultado)
+elif resposta == 4:
+    tabela = input("Digite a tabela que deseja deletar (bonus, cadastro, cadastro_info, funcionario, orcamento): ")
+    condicao_coluna = input("Digite a coluna da condição: ")
+    condicao_valor = input("Digite o valor da condição: ")
+    deletar(tabela, condicao_coluna, condicao_valor)
 
 
 
